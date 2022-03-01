@@ -1,10 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav, Container, NavItem, InputGroup, Button, Input } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import React, { useState } from "react";
+import { v4 } from "uuid";
 
 interface Itasks {
-  tasks: string[];
+  tasks: { task: string; id: string }[];
 }
 
 function Todo() {
@@ -12,10 +13,22 @@ function Todo() {
   const dispatch = useDispatch();
   const [newTask, setNewTask] = useState("");
 
-  console.log(tasks);
+  const generateNewId = function () {
+    const newId = v4();
+    return newId;
+  };
 
   const addNewTaskHandler = function () {
-    dispatch({ type: "add", value: newTask });
+    if (newTask === "") return;
+    generateNewId();
+    dispatch({ type: "add", value: { task: newTask, id: generateNewId() } });
+    setNewTask("");
+    console.log(tasks);
+  };
+
+  const deleteTaskHandler = function (e: React.FormEvent<HTMLButtonElement>) {
+    const currentId = e.currentTarget.id;
+    dispatch({ type: "remove", id: currentId });
   };
 
   return (
@@ -28,6 +41,7 @@ function Todo() {
           <InputGroup className="w-70 my-5">
             <Input
               onChange={(e) => setNewTask(e.target.value)}
+              value={newTask}
               type="text"
               className="form-control"
               placeholder="Add a new task"
@@ -36,22 +50,40 @@ function Todo() {
             />
             <Button
               onClick={addNewTaskHandler}
-              className="btn w-5"
+              className="bg-primary px-4"
               type="button"
               id="button-addon2"
             >
-              Button
+              Add
             </Button>
           </InputGroup>
         </div>
-        <div>
-          <h1 className="mb-5">List Of Tasks</h1>
-          <Nav className="list-group w-70 m-auto">
+        <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
+          {tasks.length > 0 && <h1 className="mb-5">List Of Tasks</h1>}
+          <Nav className="d-flex flex-wrap list-group w-70 m-auto">
             {tasks.map((item) => {
               return (
-                <NavItem className="list-group-item w-100">{item}</NavItem>
+                <NavItem
+                  key={item.id}
+                  className="list-group-item w-100 d-flex justify-content-between align-items-center px-4"
+                >
+                  <p className="m-0">{item.task}</p>
+                  <div>
+                    <Button className="bg-warning text-dark border me-2">
+                      Update
+                    </Button>
+                    <Button
+                      onClick={deleteTaskHandler}
+                      id={item.id}
+                      className="bg-danger border"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </NavItem>
               );
             })}
+            {tasks.length <= 0 && <h1> No Tasks </h1>}
           </Nav>
         </div>
       </Container>

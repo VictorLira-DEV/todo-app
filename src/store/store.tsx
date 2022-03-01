@@ -1,21 +1,26 @@
-import { createStore } from 'redux'
+import { createStore } from "redux";
 
 const initialState = {
-    tasks: ['sdsdfsdfsdf', 'dasfasdfasdf']
-}
+  tasks: [{ task: "task", id: "id" }],
+};
 
-const todoReducer =  (state = initialState, action: any) => {
-    if(action.type === 'add'){
+const todoReducer = (state = initialState, action: any) => {
+  if (action.type === "add") {
+    return {
+      tasks: [action.value, ...state.tasks],
+    };
+  }
 
-        return {
-            tasks:[ action.value, ...state.tasks ]
-        }
-    }
+  if (action.type === "remove") {
+    const newTasks = state.tasks.filter((item) => item.id !== action.id);
+    return {
+      tasks: [...newTasks],
+    };
+  }
 
-    return state
-}
+  return state;
+};
 
+const store = createStore(todoReducer);
 
-const store = createStore(todoReducer)
-
-export default store
+export default store;
