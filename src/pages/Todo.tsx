@@ -1,8 +1,9 @@
-import "bootstrap/dist/css/bootstrap.css";
-import { Nav, Container, NavItem, InputGroup, Button, Input } from "reactstrap";
-import { useSelector, useDispatch } from "react-redux";
-import React, { useState } from "react";
-import { v4 } from "uuid";
+import 'bootstrap/dist/css/bootstrap.css';
+import { Nav, Container, NavItem, InputGroup, Button, Input } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { v4 } from 'uuid';
 
 interface Itasks {
   tasks: { task: string; id: string }[];
@@ -11,7 +12,7 @@ interface Itasks {
 function Todo() {
   const tasks = useSelector((state: Itasks) => state.tasks);
   const dispatch = useDispatch();
-  const [newTask, setNewTask] = useState("");
+  const [newTask, setNewTask] = useState('');
 
   const generateNewId = function () {
     const newId = v4();
@@ -19,16 +20,15 @@ function Todo() {
   };
 
   const addNewTaskHandler = function () {
-    if (newTask === "") return;
+    if (newTask === '') return;
     generateNewId();
-    dispatch({ type: "add", value: { task: newTask, id: generateNewId() } });
-    setNewTask("");
-    console.log(tasks);
+    dispatch({ type: 'add', value: { task: newTask, id: generateNewId() } });
+    setNewTask('');
   };
 
   const deleteTaskHandler = function (e: React.FormEvent<HTMLButtonElement>) {
     const currentId = e.currentTarget.id;
-    dispatch({ type: "remove", id: currentId });
+    dispatch({ type: 'remove', id: currentId });
   };
 
   return (
@@ -40,7 +40,7 @@ function Todo() {
           </div>
           <InputGroup className="w-70 my-5">
             <Input
-              onChange={(e) => setNewTask(e.target.value)}
+              onChange={e => setNewTask(e.target.value)}
               value={newTask}
               type="text"
               className="form-control"
@@ -58,10 +58,10 @@ function Todo() {
             </Button>
           </InputGroup>
         </div>
-        <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
+        <div style={{ maxHeight: '300px', overflowY: 'scroll' }}>
           {tasks.length > 0 && <h1 className="mb-5">List Of Tasks</h1>}
           <Nav className="d-flex flex-wrap list-group w-70 m-auto">
-            {tasks.map((item) => {
+            {tasks.map(item => {
               return (
                 <NavItem
                   key={item.id}
@@ -70,7 +70,7 @@ function Todo() {
                   <p className="m-0">{item.task}</p>
                   <div>
                     <Button className="bg-warning text-dark border me-2">
-                      Update
+                      <Link to={`/update/${item.id}`} >Update</Link>
                     </Button>
                     <Button
                       onClick={deleteTaskHandler}

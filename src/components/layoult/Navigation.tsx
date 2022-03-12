@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.css";
+import 'bootstrap/dist/css/bootstrap.css';
 import {
   Navbar,
   Nav,
@@ -6,7 +6,7 @@ import {
   Container,
   NavItem,
   NavLink,
-} from "reactstrap";
+} from 'reactstrap';
 
 function Navigation() {
   return (
