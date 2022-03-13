@@ -1,12 +1,14 @@
 import { Input, Button, Container } from 'reactstrap';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 
 function Update() {
   const [inputCurrentTask, setInputCurrentTask] = useState('');
   const { taskId } = useParams();
   const tasks = useSelector((state: any) => state.tasks);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentTask = tasks.filter((task: any) => task.id === taskId);
@@ -16,7 +18,15 @@ function Update() {
 
   const changeInputValue = function (e: any) {
     console.log(e.target.value);
-    setInputCurrentTask(e.target.value)
+    setInputCurrentTask(e.target.value);
+  };
+
+  const updateTaskslistHandler = function () {
+    const newTasks = tasks.filter((item: any) => item.id !== taskId);
+    newTasks.unshift({ task: inputCurrentTask, id: taskId });
+
+    dispatch({ type: 'update', value: newTasks });
+    navigate('/');
   };
 
   return (
@@ -31,7 +41,10 @@ function Update() {
           onChange={changeInputValue}
           value={inputCurrentTask}
         />
-        <Button className="px-4"> Update </Button>
+        <Button onClick={updateTaskslistHandler} className="px-4">
+          {' '}
+          Update{' '}
+        </Button>
       </Container>
     </div>
   );

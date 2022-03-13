@@ -18,6 +18,12 @@ const todoReducer = (state = initialState, action: any) => {
     };
   }
 
+  if (action.type === 'update') {
+    return {
+      tasks: action.value,
+    };
+  }
+
   return state;
 };
 

@@ -1,17 +1,17 @@
-import { ReactNode } from "react";
-import Navigation from "./Navigation";
+import { ReactNode } from 'react';
+import Navigation from './Navigation';
 
 interface Iprops {
-    children: ReactNode
+  children: ReactNode;
 }
 
-function Layoult(props: Iprops){
-    return (
-        <div>
-            <Navigation />
-            {props.children}
-        </div>
-    )
+function Layoult(props: Iprops) {
+  return (
+    <div>
+      <Navigation />
+      {props.children}
+    </div>
+  );
 }
 
 export default Layoult;
